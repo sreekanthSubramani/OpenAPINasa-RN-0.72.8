@@ -7,6 +7,8 @@ import rocket from '../../asset/rocket.png'
 import { useDispatch, useSelector } from 'react-redux';
 import type { Rootstate } from '../../Redux/Store/StoreConfig';
 import { openModal } from '../../Redux/Slices/SignupModalSlice';
+import SignupModal from './SignupModal';
+import type { SignupModalType } from '../../Types/component-types';
 
 
 
@@ -18,8 +20,7 @@ export default function HomepageScreen() :JSX.Element{
     const passLogo = <Ionicons name='medical' size={20} />
 
     const dispatch = useDispatch()
-
-
+    const selector = useSelector((state: Rootstate)=> state.modal.isOpen)
 
 
     const handleModalForSignUp = ()=>{
@@ -53,7 +54,7 @@ export default function HomepageScreen() :JSX.Element{
 
                     
                     <View>
-                        <MainBtn content='Sign In' heightNum={40} widthNum={300} pressFunc={handleModalForSignUp} />
+                        <MainBtn content='Sign In' heightNum={40} widthNum={300} />
                     </View>
 
                 </View>
@@ -66,7 +67,7 @@ export default function HomepageScreen() :JSX.Element{
 
             <View style={styles.signUpSide}>
                 <Image source={rocket} style={styles.rocketPng} />
-                <MainBtn content='Sign Up' heightNum={40} widthNum={100} colors={['#ee2a7b', '#6228d7']} txtCol='white'/>
+                <MainBtn content='Sign Up' heightNum={40} widthNum={100} colors={['#ee2a7b', '#6228d7']} txtCol='white' pressFunc={handleModalForSignUp} />
             </View>
                     
 
@@ -83,7 +84,14 @@ export default function HomepageScreen() :JSX.Element{
                     <Text style={styles.pointersTC}> {"\u2B24" + " "} Project Owner : insta - @sreekanth_subramani</Text>
             </ScrollView>
         </View>
-        
+
+        {selector ?
+        <SignupModal />
+
+        :
+        <></>}
+
+
         </HomeBG>
     )
 }

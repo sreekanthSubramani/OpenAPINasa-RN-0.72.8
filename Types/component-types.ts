@@ -14,3 +14,8 @@ export type ButtonProps = {
     txtCol? : string,
     pressFunc? : ()=> void
 }
+
+export type SignupModalType = {
+    visible : boolean,
+    onCloseModal: ()=> void
+}
