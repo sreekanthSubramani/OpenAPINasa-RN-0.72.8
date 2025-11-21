@@ -14,6 +14,7 @@
 		6252D2975D42493B6497A793 /* libPods-stableopen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B740E9E57999604C9131FF49 /* libPods-stableopen.a */; };
 		7DF3D8AF88DABF6300810D96 /* libPods-stableopen-stableopenTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36A7D89AE7B5E41E8AD9E923 /* libPods-stableopen-stableopenTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D216D4392ECDF4390007A231 /* TurretRoad-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D216D4362ECDF4390007A231 /* TurretRoad-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,14 +38,17 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = stableopen/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = stableopen/main.m; sourceTree = "<group>"; };
 		1AD5B7FF74852BA2640D0BE3 /* Pods-stableopen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stableopen.debug.xcconfig"; path = "Target Support Files/Pods-stableopen/Pods-stableopen.debug.xcconfig"; sourceTree = "<group>"; };
+		1CCA4887178D49448F0E2F67 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = ../asset/fonts/Ionicons.ttf; sourceTree = "<group>"; };
 		33F31CA82906403E8ACF5610 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = ../asset/fonts/Fontisto.ttf; sourceTree = "<group>"; };
 		36A7D89AE7B5E41E8AD9E923 /* libPods-stableopen-stableopenTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stableopen-stableopenTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4E760400C3714B4EB8064C2C /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = ../asset/fonts/Ionicons.ttf; sourceTree = "<group>"; };
 		812493A69300D9CB41DBC6A8 /* Pods-stableopen-stableopenTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stableopen-stableopenTests.debug.xcconfig"; path = "Target Support Files/Pods-stableopen-stableopenTests/Pods-stableopen-stableopenTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = stableopen/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D3913DF515C427BABE461B1 /* TurretRoad-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TurretRoad-Bold.ttf"; path = "../asset/fonts/TurretRoad-Bold.ttf"; sourceTree = "<group>"; };
 		ADD43C386E55A8A68CC9EC5F /* Pods-stableopen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stableopen.release.xcconfig"; path = "Target Support Files/Pods-stableopen/Pods-stableopen.release.xcconfig"; sourceTree = "<group>"; };
 		B740E9E57999604C9131FF49 /* libPods-stableopen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stableopen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D216D4362ECDF4390007A231 /* TurretRoad-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "TurretRoad-Bold.ttf"; path = "../asset/fonts/TurretRoad-Bold.ttf"; sourceTree = "<group>"; };
+		D216D4372ECDF4390007A231 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = ../asset/fonts/Ionicons.ttf; sourceTree = "<group>"; };
+		D216D4382ECDF4390007A231 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Fontisto.ttf; path = ../asset/fonts/Fontisto.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F441911B1CD463E6686EC0DE /* Pods-stableopen-stableopenTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stableopen-stableopenTests.release.xcconfig"; path = "Target Support Files/Pods-stableopen-stableopenTests/Pods-stableopen-stableopenTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +123,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D216D4382ECDF4390007A231 /* Fontisto.ttf */,
+				D216D4372ECDF4390007A231 /* Ionicons.ttf */,
+				D216D4362ECDF4390007A231 /* TurretRoad-Bold.ttf */,
 				13B07FAE1A68108700A75B9A /* stableopen */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* stableopenTests */,
@@ -156,8 +163,8 @@
 			isa = PBXGroup;
 			children = (
 				33F31CA82906403E8ACF5610 /* Fontisto.ttf */,
-				4E760400C3714B4EB8064C2C /* Ionicons.ttf */,
 				8D3913DF515C427BABE461B1 /* TurretRoad-Bold.ttf */,
+				1CCA4887178D49448F0E2F67 /* Ionicons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -256,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D216D4392ECDF4390007A231 /* TurretRoad-Bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

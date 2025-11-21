@@ -45,8 +45,8 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-	<key>Ionicons.ttf</key>
-	<key>TurrentRoad-Bold.ttf</key>
+		<string>TurretRoad-Bold.ttf</string>
+		<string>Ionicons.ttf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

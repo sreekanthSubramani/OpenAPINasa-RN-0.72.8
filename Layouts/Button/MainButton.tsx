@@ -24,11 +24,15 @@ const styles = StyleSheet.create({
         borderRadius : 20,
         borderColor : 'rgba(255,255,255, 0.3)',
         justifyContent : "center",
-        alignItems : "center"
+        alignItems : "center",
+
     },
     contentStyles : {
         fontFamily : "TurretRoad-Bold",
         fontSize : 20,
+        justifyContent : "center",
+        alignItems : "center",
         textAlign : "center",
+        width : "100%"
     }
 })

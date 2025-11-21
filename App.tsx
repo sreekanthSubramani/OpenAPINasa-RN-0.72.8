@@ -1,19 +1,28 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import {  Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 import HomepageScreen from './components/Homescreen/Homepage';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import {Provider} from 'react-redux'
 import storeConfig from './Redux/Store/StoreConfig'
+import type { DependencyType } from './Types/font-types';
 
 
 
 
 function App(): JSX.Element {
- 
+
+
+
+
 
   return (
     <Provider store={storeConfig}>
-    <PaperProvider>
+    <PaperProvider 
+    settings={{
+      icon :(props) => <Ionicons {...props} />,
+    }}
+    >
     <View style={{flex : 1}}>
         <HomepageScreen />
     </View>
