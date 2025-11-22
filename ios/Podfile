@@ -8,6 +8,13 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, '14.0'
+
+# ✅ ADD THIS LINE (only necessary change)
+use_modular_headers!
+
+# IMPORTANT: Must be BEFORE prepare_react_native_project!
+$RN_DISABLE_BOOST_AUTO_LINKING = true
+
 prepare_react_native_project!
 
 flipper_config = FlipperConfiguration.disabled
@@ -27,20 +34,21 @@ target 'stableopen' do
     :path => config[:reactNativePath],
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => FlipperConfiguration.disabled,
+    :flipper_configuration => flipper_config,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
   target 'stableopenTests' do
     inherit! :complete
   end
+end
 
-  post_install do |installer|
-    react_native_post_install(
-      installer,
-      config[:reactNativePath],
-      :mac_catalyst_enabled => false
-    )
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
-  end
+# POST INSTALL MUST BE OUTSIDE THE TARGET BLOCK
+post_install do |installer|
+  react_native_post_install(
+    installer,
+   react_native_path = "../node_modules/react-native",   
+    :mac_catalyst_enabled => false
+  )
+  __apply_Xcode_12_5_M1_post_install_workaround(installer)
 end

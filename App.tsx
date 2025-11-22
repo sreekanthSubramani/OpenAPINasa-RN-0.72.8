@@ -5,7 +5,6 @@ import HomepageScreen from './components/Homescreen/Homepage';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {Provider} from 'react-redux'
 import storeConfig from './Redux/Store/StoreConfig'
-import type { DependencyType } from './Types/font-types';
 
 
 

@@ -5,12 +5,15 @@ import type { Rootstate } from '../../Redux/Store/StoreConfig'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Formik, useFormikContext } from 'formik'
 import * as Yup from 'yup'
-import { TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper'
 import MainBtn from '../../Layouts/Button/MainButton'
 import { useState } from 'react'
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
 import type { DOB } from '../../Types/component-types'
 import { closeModal } from '../../Redux/Slices/SignupModalSlice' 
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 
 export default function SignupModal(): JSX.Element {
@@ -57,8 +60,21 @@ export default function SignupModal(): JSX.Element {
     })
 
 
-    function handleFormSubmission(){
+    async function handleGoogleSignin(){
 
+      try{
+        await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog : true})
+        const {idToken} = await GoogleSignin.signIn()
+
+        const googleCredential  = auth.GoogleAuthProvider.credential(idToken)
+
+        const userCredential = await auth().signInWithCredential(googleCredential)
+        return userCredential
+
+
+      }catch(e){
+        console.log(e)
+      }
     }
 
 
@@ -79,7 +95,7 @@ export default function SignupModal(): JSX.Element {
           <Formik
           initialValues={{name : "", dateOfB : ""}}
           validationSchema={signUpSchema}
-          onSubmit={()=> console.log("Submitted Here!!")}
+          onSubmit={handleGoogleSignin}
           >
               {({handleChange,errors,values,setFieldValue,touched, handleSubmit})=>(
                 <View style={styles.insideForm}>
