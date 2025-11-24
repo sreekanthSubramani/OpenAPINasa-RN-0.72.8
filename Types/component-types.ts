@@ -37,3 +37,13 @@ export type SubmitValuesFormik = {
     name : string,
     dateOfB : string
 }
+
+
+export type PostRequestforNew = {
+    name : string,
+    dateOfB : string,
+    password : string
+}
+
+
+export type SuccessMessage = (text1 :string, text2 : string)=> void

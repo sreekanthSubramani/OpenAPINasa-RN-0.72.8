@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet,useWindowDimensions, Image, ScrollView} from 'react-native'
+import {View, Text, StyleSheet,useWindowDimensions, Image, ScrollView, Button} from 'react-native'
 import HomeBG from "../../Layouts/Home/HomeBGLayout";
 import { Input } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -9,6 +9,7 @@ import type { Rootstate } from '../../Redux/Store/StoreConfig';
 import { openModal } from '../../Redux/Slices/SignupModalSlice';
 import SignupModal from './SignupModal';
 import type { SignupModalType } from '../../Types/component-types';
+
 
 
 
@@ -26,6 +27,7 @@ export default function HomepageScreen() :JSX.Element{
     const handleModalForSignUp = ()=>{
         dispatch(openModal())
     }
+
 
     
     return(
@@ -64,6 +66,7 @@ export default function HomepageScreen() :JSX.Element{
             <View style={styles.contentToSignUp}>
                 <Text style={styles.insideSignUp}>If you want to sign up with SpaceCosmos to know more about the Space Related Content !</Text>
             </View>
+
 
             <View style={styles.signUpSide}>
                 <Image source={rocket} style={styles.rocketPng} />

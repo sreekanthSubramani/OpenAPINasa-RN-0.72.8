@@ -9,10 +9,12 @@ import { TextInput } from 'react-native-paper'
 import MainBtn from '../../Layouts/Button/MainButton'
 import { useState } from 'react'
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
-import type { DOB } from '../../Types/component-types'
+import type { DOB,PostRequestforNew } from '../../Types/component-types'
 import { closeModal } from '../../Redux/Slices/SignupModalSlice' 
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { axiosapi } from '../../axios/configAxios'
+import { successToast } from '../../Toast/AllToasts'
 
 
 
@@ -54,13 +56,14 @@ export default function SignupModal(): JSX.Element {
           }
 
 
-    const signUpSchema = Yup.object().shape({
-      name : Yup.string().lowercase().required("Required"),
+    const signUpSchema = Yup.object().shape ({
+      name : Yup.string().required("Required"),
+      password : Yup.string().min(6, "Password should be atleast 6 c22eharacters").required("Required"),
       dateOfB : Yup.date().required("Required"),
     })
 
 
-    async function handleGoogleSignin(){
+    async function handleGoogleSignin(props : PostRequestforNew){
 
       try{
         await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog : true})
@@ -69,13 +72,22 @@ export default function SignupModal(): JSX.Element {
         const googleCredential  = auth.GoogleAuthProvider.credential(idToken)
 
         const userCredential = await auth().signInWithCredential(googleCredential)
-        console.log(userCredential.user, 'User Credentials')
+
+        const postUser = await axiosapi.post("/createUser", {
+          name : props.name, 
+          dob : props.dateOfB,  
+          username : userCredential.user.email, 
+          password : props.password})
+
+
+          console.log(postUser.data)
         return userCredential
 
       }catch(e){
         console.log(e)
       }
     }
+
 
 
   return (
@@ -93,9 +105,9 @@ export default function SignupModal(): JSX.Element {
 
           <Text style={styles.signUpHeading}>Sign up with us ....</Text>
           <Formik
-          initialValues={{name : "", dateOfB : ""}}
+          initialValues={{name : "", password : "", dateOfB : ""}}
           validationSchema={signUpSchema}
-          onSubmit={handleGoogleSignin}
+          onSubmit={(props)=>handleGoogleSignin(props)}
           >
               {({handleChange,errors,values,setFieldValue,touched, handleSubmit})=>(
                 <View style={styles.insideForm}>
@@ -103,7 +115,6 @@ export default function SignupModal(): JSX.Element {
                       label="Name"
                       style={styles.txtInp}
                       onChangeText={handleChange('name')}
-                      onBlur={()=> console.log('Blurred')}
                       />  
                       <View>
                         {!touched.name ?
@@ -112,6 +123,23 @@ export default function SignupModal(): JSX.Element {
                           <></>
                         }
                       </View>
+
+                       <TextInput  
+                      label="Password"
+                      style={styles.txtInp}
+                      onChangeText={handleChange('password')}
+                      secureTextEntry={true}
+                      />  
+                      <View>
+                        {!touched.password ?
+                          <Text style={{color : 'red'}}>{errors.password}</Text>
+                          :
+                          <></>
+                        }
+                      </View>
+                  
+                          
+
 
                       <TextInput
                         label={ dob.date && dob.month && dob.year ?
@@ -157,21 +185,21 @@ export default function SignupModal(): JSX.Element {
                         </View>
 
                                   <View style={styles.signinModal}>
-          <Text>We accept only Google Sign in as of now</Text>
-          <Text>Sorry for the Inconvenience !</Text>
+          <Text style={{fontFamily : "TurretRoad-Bold"}}>We accept only Google Sign in as of now</Text>
+          <Text style={{fontFamily : "TurretRoad-Bold"}}>The username to login is your Gmail address</Text>
           <Image
           source={require('../../asset/gmail_logo.png')}
           style={{
-            width : "auto",
-            height : 150,
+            width : 80,
+            height : 80,
             justifyContent : "center",
-            alignItems : 'center',
+            alignSelf : 'center',
           }}/>
 
-          {values.name && values.dateOfB?
+          {values.name && values.dateOfB && values.password ?
           <MainBtn content='Continue' heightNum={height / 20} widthNum={width/1.1} pressFunc={handleSubmit}/>
           :
-          <Text style={{fontFamily : "TurretRoad-Bold"}}>Please enter your name and Date of Birth for us to sign in !!</Text>
+          <></>         
           }   
 
         </View>
