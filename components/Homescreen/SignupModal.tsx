@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Modal, useWindowDimensions,Image } from 'react-
 import { useSelector, useDispatch } from 'react-redux'
 import type { Rootstate } from '../../Redux/Store/StoreConfig'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Formik, useFormikContext } from 'formik'
+import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { TextInput } from 'react-native-paper'
 import MainBtn from '../../Layouts/Button/MainButton'
@@ -69,8 +69,8 @@ export default function SignupModal(): JSX.Element {
         const googleCredential  = auth.GoogleAuthProvider.credential(idToken)
 
         const userCredential = await auth().signInWithCredential(googleCredential)
+        console.log(userCredential.user, 'User Credentials')
         return userCredential
-
 
       }catch(e){
         console.log(e)
