@@ -8,7 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { Rootstate } from '../../Redux/Store/StoreConfig';
 import { openModal } from '../../Redux/Slices/SignupModalSlice';
 import SignupModal from './SignupModal';
-import type { SignupModalType } from '../../Types/component-types';
+import { axiosapi } from '../../axios/configAxios';
+import { useState } from 'react';
+import { SecureKeychain } from '../../src/config/secureStorage';
 
 
 
@@ -23,12 +25,32 @@ export default function HomepageScreen() :JSX.Element{
     const dispatch = useDispatch()
     const selector = useSelector((state: Rootstate)=> state.modal.isOpen)
 
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
 
     const handleModalForSignUp = ()=>{
         dispatch(openModal())
     }
 
+    const checkIfUsersWork = async() =>{
+        try{
+            const sendUsername = await axiosapi.post('/uservalidate', {
+                username : username.toLowerCase(),
+                password : password
+            })
 
+            const data = sendUsername?.data
+            await SecureKeychain.save({
+                token : data.token
+            })
+
+
+        }catch(e){
+            console.log(e)
+        }
+
+    }
     
     return(
         <HomeBG colors={["#4F7CD1","#cecacaff"]}>
@@ -45,6 +67,7 @@ export default function HomepageScreen() :JSX.Element{
                     label="Username"
                     labelStyle={{color : "black"}}
                     leftIcon = {userLogo} 
+                    onChangeText={(e)=> setUsername(e)}
                      />
 
                         <Input
@@ -52,11 +75,12 @@ export default function HomepageScreen() :JSX.Element{
                     labelStyle={{color : "black"}}
                     secureTextEntry={true}
                     leftIcon = {passLogo} 
+                    onChangeText={(e)=> setPassword(e)}
                      />
 
                     
                     <View>
-                        <MainBtn content='Sign In' heightNum={40} widthNum={300} />
+                        <MainBtn content='Sign In' heightNum={40} widthNum={300} pressFunc={checkIfUsersWork} />
                     </View>
 
                 </View>

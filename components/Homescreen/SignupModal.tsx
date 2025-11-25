@@ -7,14 +7,14 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { TextInput } from 'react-native-paper'
 import MainBtn from '../../Layouts/Button/MainButton'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
 import type { DOB,PostRequestforNew } from '../../Types/component-types'
 import { closeModal } from '../../Redux/Slices/SignupModalSlice' 
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { axiosapi } from '../../axios/configAxios'
-import { successToast } from '../../Toast/AllToasts'
+
 
 
 
@@ -87,6 +87,7 @@ export default function SignupModal(): JSX.Element {
         console.log(e)
       }
     }
+
 
 
 
