@@ -39,13 +39,9 @@ export default function HomepageScreen() :JSX.Element{
                 username : username.toLowerCase(),
                 password : password
             })
-
             const data = sendUsername?.data
-            await SecureKeychain.save({
-                token : data.token
-            })
 
-
+            await SecureKeychain.saveAccessToken(data.access)   
         }catch(e){
             console.log(e)
         }

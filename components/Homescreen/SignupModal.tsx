@@ -80,7 +80,7 @@ export default function SignupModal(): JSX.Element {
           password : props.password})
 
 
-          console.log(postUser.data)
+          console.log(postUser?.data || "data not found")
         return userCredential
 
       }catch(e){
