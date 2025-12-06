@@ -1,4 +1,5 @@
-import { ReactNode } from "react"
+import  React, { ReactNode } from "react"
+
 
 export type HomeLayoutType = {
     colors : string[],
@@ -47,3 +48,39 @@ export type PostRequestforNew = {
 
 
 export type SuccessMessage = (text1 :string, text2 : string)=> void
+
+
+export type Regions = {
+    latitude?: number 
+    longitude?: number,
+    latitudeDelta : number,
+    longitudeDelta : number
+}
+
+
+export type MetaData = {
+    name : string,
+    state : string,
+    country : string,
+    lat : number,
+    long : number,
+    degree : string,
+    description : string,
+    main : string,
+    windSpeed : number,
+    pictures? : string[]
+}
+
+
+export type ShowCityModal = {
+    showCityModal : boolean,
+    setShowCityModal : React.Dispatch<React.SetStateAction<boolean>>,
+    distinguishedData? : MetaData,
+    loadingState : boolean,
+    setMetaData? : React.Dispatch<React.SetStateAction<MetaData>>
+}
+
+export type MapillaryAPICall = {
+    id : string,
+    thumb_256_url : string
+}

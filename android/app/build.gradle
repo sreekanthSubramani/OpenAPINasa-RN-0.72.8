@@ -19,6 +19,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.stableopen"
+
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId "com.stableopen"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -71,11 +76,18 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    
 }
+
+
+
+
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply plugin: 'com.google.gms.google-services'
 applyNativeModulesAppBuildGradle(project)
+
+
 
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {  Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 import HomepageScreen from './components/Homescreen/Homepage';
+import GibbsScreen from './components/GIBBS_Screen/Gibbs_screen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {Provider} from 'react-redux'
 import storeConfig from './Redux/Store/StoreConfig'
@@ -25,8 +26,14 @@ function App(): JSX.Element {
     }}
     >
       <NavigationContainer>
-      <BottomTabs.Navigator>
-        <BottomTabs.Screen name='Homepage' component={HomepageScreen} />
+      <BottomTabs.Navigator screenOptions={{
+        header : ()=> null,
+        tabBarStyle : {
+          height : 60
+        }
+      }}>
+        <BottomTabs.Screen name='GIBS' component={GibbsScreen} />
+        <BottomTabs.Screen name='GIBS s' component={GibbsScreen} />
       </BottomTabs.Navigator>
       </NavigationContainer>
 
