@@ -84,3 +84,9 @@ export type MapillaryAPICall = {
     id : string,
     thumb_256_url : string
 }
+
+export type FetchedCal = {
+    date : string,
+    month : string,
+    year : string
+}
