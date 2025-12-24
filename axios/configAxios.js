@@ -23,7 +23,7 @@ axiosapi.interceptors.request.use(
 
 
 let isRefreshing = false
-const failedQueue = []
+let failedQueue = []
 
 axiosapi.interceptors.response.use(
     (response)=> response,
@@ -42,10 +42,11 @@ axiosapi.interceptors.response.use(
                 failedQueue.push({resolve, reject})
             })
             .then((token)=>{
-                originalRequest.headers.authorization = `Bearer ${token}`
+                originalRequest.headers.Authorization = `Bearer ${token}`
+                return axiosapi(originalRequest)
             })
             .catch((err)=>{
-                console.log(err)
+                console.log(err, 'here is the problem')
             })
         }
 
@@ -71,16 +72,16 @@ axiosapi.interceptors.response.use(
             failedQueue.forEach((p)=> p.resolve(newAccessToken))
             failedQueue = []
 
-            originalRequest.headers.authorization = `Bearer ${newAccessToken}`
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
             return axiosapi(originalRequest)
 
 
         }catch(e){
             console.log(e)
 
-            failedQueue.forEach((p)=> p.reject(err))
+            failedQueue.forEach((p)=> p.reject(e))
             failedQueue = []
-            return Promise.reject(err)
+            return Promise.reject(e)
         } finally {
             isRefreshing = false
         }

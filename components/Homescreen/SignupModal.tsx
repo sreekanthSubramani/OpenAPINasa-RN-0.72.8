@@ -7,19 +7,21 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { TextInput } from 'react-native-paper'
 import MainBtn from '../../Layouts/Button/MainButton'
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
-import type { DOB,PostRequestforNew } from '../../Types/component-types'
+import type { DOB,GoogleUserData,PostRequestforNew } from '../../Types/component-types'
 import { closeModal } from '../../Redux/Slices/SignupModalSlice' 
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { axiosapi } from '../../axios/configAxios'
-
+import { addStateInfo } from '../../Redux/Slices/ProfileSection'
+import { AuthProvider, UseAuthContext } from '../../AuthContext/AuthContext'
 
 
 
 export default function SignupModal(): JSX.Element {
 
+  const {login} = useContext(UseAuthContext)
 
   const modalOpen = useSelector((state: Rootstate) => state.modal.isOpen)
   const dispatch = useDispatch()
@@ -38,6 +40,13 @@ export default function SignupModal(): JSX.Element {
       setShowCalender((prev)=> !prev)
     }
 
+    function dispatchTheProfiles({displayName, email, photoURL} : GoogleUserData){
+      dispatch(addStateInfo({
+          name : displayName,
+          email : email,
+          photo : photoURL
+      }))
+    }    
 
 
     function setDateFunc(dt : {date : DateType | any}, setFieldValue : (field : string, value : any)=> void){
@@ -58,12 +67,14 @@ export default function SignupModal(): JSX.Element {
 
     const signUpSchema = Yup.object().shape ({
       name : Yup.string().required("Required"),
-      password : Yup.string().min(6, "Password should be atleast 6 c22eharacters").required("Required"),
+      password : Yup.string().min(6, "Password should be atleast 6 characters").required("Required"),
       dateOfB : Yup.date().required("Required"),
     })
 
 
     async function handleGoogleSignin(props : PostRequestforNew){
+
+      console.log(props, 'props straight')
 
       try{
         await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog : true})
@@ -73,14 +84,32 @@ export default function SignupModal(): JSX.Element {
 
         const userCredential = await auth().signInWithCredential(googleCredential)
 
+        const dp = userCredential?.additionalUserInfo.profile.picture
+
+
+        const name = userCredential?.additionalUserInfo.profile.name ?? " "
+        const email = userCredential?.additionalUserInfo.profile.email ?? " "
+        const photo = userCredential?.additionalUserInfo.profile.picture ?? " "
+
+
         const postUser = await axiosapi.post("/createUser", {
           name : props.name, 
           dob : props.dateOfB,  
           username : userCredential.user.email, 
-          password : props.password})
+          password : props.password,
+          profileLink : dp
+        })
 
+        const res = await postUser.data
+        console.log(res, 'response')
 
-          console.log(postUser?.data || "data not found")
+      const userData = await postUser.data
+        dispatchTheProfiles({
+          displayName : name,
+          email,
+          photoURL : photo
+        })
+
         return userCredential
 
       }catch(e){

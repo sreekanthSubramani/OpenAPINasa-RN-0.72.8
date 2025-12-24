@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
-import openModalReducer  from '../Slices/SignupModalSlice' 
+import openModalReducer  from '../Slices/SignupModalSlice.js' 
+import profileState from '../Slices/ProfileSection.js'
 
 
 const store = configureStore({
     reducer: {
-        modal : openModalReducer
+        modal : openModalReducer,
+        profile : profileState
     }
 })
 

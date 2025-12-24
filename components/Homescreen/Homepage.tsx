@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet,useWindowDimensions, Image, ScrollView, Button} from 'react-native'
+import {View, Text, StyleSheet,useWindowDimensions,ScrollView} from 'react-native'
 import HomeBG from "../../Layouts/Home/HomeBGLayout";
 import { Input } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -8,16 +8,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { Rootstate } from '../../Redux/Store/StoreConfig';
 import { openModal } from '../../Redux/Slices/SignupModalSlice';
 import SignupModal from './SignupModal';
+import { useState, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { axiosapi } from '../../axios/configAxios';
-import { useState } from 'react';
-import { SecureKeychain } from '../../src/config/secureStorage';
-
+import { UseAuthContext } from '../../AuthContext/AuthContext';
+import { addStateInfo } from '../../Redux/Slices/ProfileSection'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 export default function HomepageScreen() :JSX.Element{
     
-    
+    const navigations = useNavigation()
     const {height, width} = useWindowDimensions()
     const userLogo = <Ionicons name='at-sharp' size={20} />
     const passLogo = <Ionicons name='medical' size={20} />
@@ -33,7 +35,10 @@ export default function HomepageScreen() :JSX.Element{
         dispatch(openModal())
     }
 
-    const checkIfUsersWork = async() =>{
+    const {login} = useContext(UseAuthContext)
+
+    const checkIfUsersWork = async () =>{
+
         try{
             const sendUsername = await axiosapi.post('/uservalidate', {
                 username : username.toLowerCase(),
@@ -41,7 +46,27 @@ export default function HomepageScreen() :JSX.Element{
             })
             const data = sendUsername?.data
 
-            await SecureKeychain.saveAccessToken(data.access)   
+            console.log(data, 'response from validate')
+            login(data.access, data.refresh)
+            await AsyncStorage.setItem('profileData', JSON.stringify({
+                name : data.name,
+                photo : data.photo,
+                email : data.email
+            }))
+
+            const getProfileData = await AsyncStorage.getItem('profileData')
+            
+            if(getProfileData){
+                const getDataProfile = JSON.stringify(getProfileData)
+                dispatch(addStateInfo(getDataProfile))
+            }else{
+                dispatch(addStateInfo({
+                    name : data.name,
+                    photo : data.photo,
+                    email : data.email
+                }))
+            }
+
         }catch(e){
             console.log(e)
         }
@@ -89,7 +114,7 @@ export default function HomepageScreen() :JSX.Element{
 
 
             <View style={styles.signUpSide}>
-                <Image source={rocket} style={styles.rocketPng} />
+                {/* <Image source={rocket} style={styles.rocketPng} /> */}
                 <MainBtn content='Sign Up' heightNum={40} widthNum={100} colors={['#ee2a7b', '#6228d7']} txtCol='white' pressFunc={handleModalForSignUp} />
             </View>
                     

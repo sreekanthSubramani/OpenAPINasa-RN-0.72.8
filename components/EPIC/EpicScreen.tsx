@@ -1,9 +1,9 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {View, StyleSheet, Text, Button, Image, useWindowDimensions, DevSettings} from 'react-native'
+import {View, StyleSheet, Text, Button, Image, useWindowDimensions} from 'react-native'
 import { useState, useEffect, useCallback, useRef, useMemo} from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import type { FetchedCal } from '../../Types/component-types'
-
+import FastImage from 'react-native-fast-image'
 
 
 export default function EPICScreen() : JSX.Element{
@@ -16,8 +16,9 @@ export default function EPICScreen() : JSX.Element{
     const [showImg, setShowImg] = useState<boolean>(false)
     const {height, width} = useWindowDimensions()
     
-    const APIKey = 'O1GFwn8IcFDAcUJU5VoHL6T36oITIokCSgpgLNEx'
 
+    //dscvor & lunar positions
+    const [metaDates, setMetaDates] = useState<string[]>([]);
     const revisit = useRef(false)
     const index = useRef(0)
 
@@ -28,13 +29,10 @@ export default function EPICScreen() : JSX.Element{
         try{
             const data = await fetch(`https://epic.gsfc.nasa.gov/api/natural/${yearInit}-${monthInit}-${dateInit}`)
             const result = await data.json()
-            console.log(result)
-
-            //all the fucking setters down !!
-            
+            console.log(result, 'result')
             const img = result[0].image
             setDisplayImg(img)
-            setImageWithArray(result)
+            
             const [yearFromFetch, monthFromFetch, dateFromFetch] = result[0].date.split(" ")[0].split('-')
 
             setFetchedCal({
@@ -43,6 +41,9 @@ export default function EPICScreen() : JSX.Element{
                 year : yearFromFetch
             })
 
+            setImageWithArray(result)
+
+            
         }catch(e){
             console.log(e)
         }
@@ -67,26 +68,11 @@ export default function EPICScreen() : JSX.Element{
 
     )   
 
-    // const RenderImageAlone = useMemo(()=>{
-    //     return(
-    //         <Image
-    //             source={{uri : image}}
-    //                 style={{
-    //                 height : height - 200,
-    //                 width : width,
-    //                 borderColor : "white",
-    //                 borderWidth : 10,
-    //                 zIndex : 100
-    //             }}
-    //             resizeMode='contain' />
-    //     )
-    // },[])
 
     
     async function handleEPIC(){
-            console.log('check')
         try{
-            
+            console.log(fetchedCal, 'fetched calculations')
             if(displayImg && fetchedCal){
             const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${fetchedCal.year}/${fetchedCal.month}/${fetchedCal.date}/png/${displayImg}.png`
             setImage(imageUrl)
@@ -98,32 +84,18 @@ export default function EPICScreen() : JSX.Element{
         }
     }
 
-    
-    // function playRotation(){
-    //     let copyMetaImages = [...metaImages]
-        
-    //     const playRotate = setInterval(()=>{
-    //         let metaImagesShift = copyMetaImages.shift()
-            
-    //         setImage(`https://epic.gsfc.nasa.gov/archive/natural/${fetchedCal.year}/${fetchedCal.month}/${fetchedCal.date}/png/${metaImagesShift}.png`)
-            
-    //         setDisplayImg(metaImagesShift)
-    //         if(copyMetaImages.length == 0){
-    //             clearInterval(playRotate)
-    //         }
-    //     },5000)
-    // }
+
 
     function playRotation(){
         index.current = 0;
         
         const setRotation = setInterval(()=>{
 
+
             index.current++
             let nextUpImages = metaImages[index.current]
             
-            
-            if(index.current <= metaImages.length){
+            if(index.current != metaImages.length){
                 setImage(`https://epic.gsfc.nasa.gov/archive/natural/${fetchedCal.year}/${fetchedCal.month}/${fetchedCal.date}/png/${nextUpImages}.png`)
             }else{
                 setImage(`https://epic.gsfc.nasa.gov/archive/natural/${fetchedCal.year}/${fetchedCal.month}/${fetchedCal.date}/png/${metaImages[0]}.png`)
@@ -132,6 +104,7 @@ export default function EPICScreen() : JSX.Element{
             
             if(index.current >= metaImages.length){
                 clearInterval(setRotation)
+                index.current = 0
             }
 
 
@@ -140,24 +113,43 @@ export default function EPICScreen() : JSX.Element{
 
     }
 
+
+    
+
+
+
     function setImageWithArray(result : any){
-        const array = result.map((metaData : any)=> {
-            return metaData.image
-        })
-        setMetaImages(array)
+          const images: string[] = [];
+          const dates: string[] = [];
+
+
+            for (const m of result){
+                images.push(m.image);
+                dates.push(m.date);
+            }
+
+            setMetaImages(images);
+            setMetaDates(dates);
     }
 
-    console.log(image)
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////x
+
+
+
+
+
+
+
 
     return(
             <SafeAreaView style={{flex : 1,backgroundColor : "black",}}>
                 <View style={{backgroundColor : "black", flexDirection : "column"}}>
+
                 {showImg ?  
 
-
                 <Image
-                source={{uri : image}}
+                source={{
+                    uri : image }}
                 style={{
                     height : height - 200,
                     width : width,

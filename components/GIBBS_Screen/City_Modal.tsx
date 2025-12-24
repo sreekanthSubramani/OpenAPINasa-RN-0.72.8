@@ -5,6 +5,8 @@ import LinearGradient from "react-native-linear-gradient"
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder"
 import type { MetaData } from "../../Types/component-types"
 import FastImage from "react-native-fast-image"
+import axios from "axios"
+import { axiosapi } from "../../axios/configAxios"
 
 
 
@@ -15,7 +17,6 @@ export default function CityModal({showCityModal, setShowCityModal,distinguished
     const {width , height} = useWindowDimensions()
     const tempImages = 'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     let tempimagesArray = [tempImages, tempImages, tempImages]
-    console.log(tempimagesArray, 'temp')
 
 
     const RESET_METADATA : MetaData ={
@@ -32,7 +33,7 @@ export default function CityModal({showCityModal, setShowCityModal,distinguished
     }
 
 
-    function closeModStateClear(){
+    async function closeModStateClear(){
         setShowCityModal(false)
         setMetaData(RESET_METADATA)
     }

@@ -1,14 +1,15 @@
-import {View, StyleSheet, Text, Button, ActivityIndicator} from 'react-native'
+import {View, StyleSheet, Text, ActivityIndicator} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Geolocation from '@react-native-community/geolocation'
 import { useState, useEffect } from 'react'
-import MapView, {UrlTile, Region} from 'react-native-maps'
+import MapView, {UrlTile, Region, LocalTile} from 'react-native-maps'
 import type {Region as RegionType} from '../../node_modules/react-native-maps/lib/sharedTypes'
 import { Chip } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CityModal from './City_Modal'
-import type { MetaData, MapillaryAPICall } from '../../Types/component-types'
+import type { ArrayFields, MetaData } from '../../Types/component-types'
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker'
+import { reverseGeo, fetchWeather, fetchMapillary, locationServiceArray} from './AllAsyncFetchServices'
 
 
 
@@ -56,9 +57,6 @@ function convertDateYYMM(d : Date){
     function openMapCal(){
         setMapCalendar((prev)=> !prev)
     }
-
-
-
 
 
 
@@ -110,63 +108,49 @@ async function getNativeCoords(e : any){
                     const nativeLongs = e.nativeEvent.coordinate.longitude
                     //location finder
             
-                    const locationFinder = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${nativeLats}&lon=${nativeLongs}&limit=10&appid=${openReverseGeoCoding}`)
-                    const data = await locationFinder.json()
+                    const locationFinder = await reverseGeo(nativeLats, nativeLongs)
 
-
-
-                    const fetchedLat = data[0]?.lat
-                    const fetchedLong = data[0]?.lon
-
-                    // open weather
-
-                    const findWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${fetchedLat}&lon=${fetchedLong}&appid=${openWeatherAPIKEY}`)
-                    const dataWeather = await findWeather.json()    
-
-
-                    //mapillary function
-
-                    const convertedBbox = buildBBox(nativeLats, nativeLongs)
-                    let minLat = convertedBbox.minLat
-                    let minLong = convertedBbox.minLon
-                    let newMaxLat = convertedBbox.maxLat    
-                    let newMaxLong = convertedBbox.maxLon
+                    const fetchedLat = locationFinder[0]?.lat
+                    const fetchedLong = locationFinder[0]?.lon
                     
+                    
+                    const convertedBbox = buildBBox(nativeLats, nativeLongs)
 
-                    let celcius = (Number(dataWeather?.main.temp) - 273.15).toFixed(2)               
-                    let outScopeThumb = []
-                    let carryForwardPicsfromAPI;
+                    let minLat = convertedBbox.minLat
+                    let minLon = convertedBbox.minLon
+                    let maxLat = convertedBbox.maxLat    
+                    let maxLon = convertedBbox.maxLon
 
-                    if(data[0]?.lon && data[0]?.lat){
-                         const findStreetView = await fetch(`https://graph.mapillary.com/images?` + 
-                        `access_token=${mapillaryToken}` + 
-                        `&fields=thumb_256_url` + 
-                        `&bbox=${minLong},${minLat},${newMaxLong},${newMaxLat}`+
-                        `&limit=5`)       
+                    const [findWeather, findMapillary] = await Promise.all([
+                        fetchWeather(fetchedLat, fetchedLong),
+                        fetchMapillary(minLat, minLon,maxLat,maxLon)
+                    ])
 
-                        const getStreetView = await findStreetView.json()
-                        outScopeThumb = getStreetView.data
-                        carryForwardPicsfromAPI = outScopeThumb.map((data : any)=> data.thumb_256_url)
-                    }
-
-                        
-               
-
-
-                    if(data !== null && dataWeather !== null){
+                    let celcius = (Number(findWeather?.main.temp) - 273.15).toFixed(2)                 
+            
+                    if(locationFinder !== null && findWeather !== null){
                         setMetaData({
-                            name : data[0]?.name,
-                            country : data[0]?.country,
+                            name : locationFinder[0]?.name,
+                            country : locationFinder[0]?.country,
                             degree : celcius,
-                            state : data[0]?.state,
-                            lat : data[0]?.lat,
-                            long : data[0]?.lon,
-                            description : dataWeather?.weather[0].description,
-                            main :dataWeather?.weather[0].main,
-                            windSpeed : dataWeather?.wind.speed,
-                            pictures : carryForwardPicsfromAPI
+                            state : locationFinder[0]?.state,
+                            lat : locationFinder[0]?.lat,
+                            long : locationFinder[0]?.lon,
+                            description : findWeather?.weather[0].description,
+                            main :findWeather?.weather[0].main,
+                            windSpeed : findWeather?.wind.speed,
+                            pictures : findMapillary
                         })
                         setLoadingState(true)
+
+                        const arrayFields : ArrayFields = {
+                            lat : fetchedLat,
+                            long : fetchedLong,
+                            name : locationFinder[0].name,
+                            state : locationFinder[0].state,
+                            country : locationFinder[0].country
+                        }
+                        locationServiceArray(arrayFields)
                     }
 
         }catch(e){

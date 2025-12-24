@@ -90,3 +90,13 @@ export type FetchedCal = {
     month : string,
     year : string
 }
+
+
+export type GoogleUserData = {
+    displayName : string,
+    email : string,
+    photoURL : string,
+}
+
+
+export type ArrayFields = Pick<MetaData, 'lat' | 'long' | 'name' | 'state' | 'country'>

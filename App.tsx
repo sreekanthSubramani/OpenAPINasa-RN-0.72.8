@@ -1,48 +1,61 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {  Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
-import HomepageScreen from './components/Homescreen/Homepage';
-import GibbsScreen from './components/GIBBS_Screen/Gibbs_screen';
-import EPICScreen from './components/EPIC/EpicScreen';
+import { useContext } from 'react'
+import {AuthProvider,UseAuthContext} from './AuthContext/AuthContext';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import {Provider} from 'react-redux'
+import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
+import { Provider as PaperProvider} from 'react-native-paper';
+import {Provider as ReduxProvider} from 'react-redux'
+import {SafeAreaProvider} from 'react-native-safe-area-context'
 import storeConfig from './Redux/Store/StoreConfig'
 import Toast from 'react-native-toast-message';
+import ProfileScreen  from './components/More/ProfileScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import BottomTabs from './components/ScreenAlignments/BottomTabs';
+import HomepageScreen from './components/Homescreen/Homepage';
+import AuthStack from './components/ScreenAlignments/HomePageAuth';
 
 
+const NativeStack = createNativeStackNavigator()
 
-function App(): JSX.Element {
-
-
-  const BottomTabs = createBottomTabNavigator()
+export default function App(): JSX.Element {
 
 
-  return (
-    <Provider store={storeConfig}>
-    <PaperProvider 
-    settings={{
-      icon :(props) => <Ionicons {...props} />,
-    }}
-    >
-      <NavigationContainer>
-      <BottomTabs.Navigator screenOptions={{
-        header : ()=> null,
-        tabBarStyle : {
-          height : 60
-        }
-      }}>
-        <BottomTabs.Screen name='GIBS' component={GibbsScreen} />
-        <BottomTabs.Screen name='EPIC' component={EPICScreen} />
-      </BottomTabs.Navigator>
+  function UIViewStack(){
+    const {isAuthenticated, authLoading} = useContext(UseAuthContext)
+    console.log(isAuthenticated, authLoading, 'here we gop')
+
+    if(authLoading){
+      return(
+        <View>
+          <View style={{flex : 1, justifyContent : "center"}}>
+            <ActivityIndicator size='large' />
+          </View>
+        </View>
+      )
+    }
+
+    return isAuthenticated ?  <BottomTabs /> : <AuthStack /> 
+
+  }
+
+
+return(
+
+  <ReduxProvider store={storeConfig}>
+    <PaperProvider settings={{
+      icon : (props)=> <Ionicons {...props} />
+    }}>
+      <AuthProvider>   
+        <NavigationContainer>
+          <UIViewStack />
       </NavigationContainer>
-
-
+      </AuthProvider>
     </PaperProvider>
-    <Toast />
-    </Provider>
-  );
+  
+    </ReduxProvider>
+
+)
+  
 }
 
 const styles = StyleSheet.create({
@@ -64,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+
