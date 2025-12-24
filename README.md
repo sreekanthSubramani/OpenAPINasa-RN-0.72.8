@@ -1,5 +1,8 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+The project consumes library with React Native, React Native Navigation, React Native Bottom Tabs, Json Web Tokens, Firebase Login, Redux Toolkit, axios, Formik, React Native Async Storage,
+React Native Keychain.
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
